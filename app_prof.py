@@ -6,7 +6,7 @@ import json
 import pandas as pd
 from PIL import Image
 from dotenv import load_dotenv
-from annotated_text import annotated_text
+# from annotated_text import annotated_text
 from openai import OpenAI
 
 load_dotenv()
@@ -69,7 +69,7 @@ def get_logs_for_exercice(exercice, date):
 
 # Fonction d'appel à l'API OpenAI pour extraction contexte / tâche
 def call_llm(prompt_text):
-    system_msg = "Tu es un expert en analyse de prompt. À partir d’un prompt utilisateur, identifie les parties de la phrase correspondant au CONTEXTE (le cadre ou la situation) et à la TÂCHE (ce que l’on attend de l’IA). Retourne ta réponse sous la forme d’une liste JSON avec les champs 'type' (valeurs possibles : 'contexte', 'tâche') et 'text'."
+    system_msg = "Tu es un expert en analyse de prompt. À partir d'un prompt utilisateur, identifie les parties de la phrase correspondant au CONTEXTE (le cadre ou la situation) et à la TÂCHE (ce que l’on attend de l’IA). Retourne ta réponse sous la forme d’une liste JSON avec les champs 'type' (valeurs possibles : 'contexte', 'tâche') et 'text'."
     user_msg = f"Prompt : {prompt_text}"
     
     completion = client.chat.completions.create(
@@ -126,30 +126,3 @@ def afficher_resultats(tab, exercice):
 afficher_resultats(tab1, "Exercice 1")
 afficher_resultats(tab2, "Exercice 2")
 afficher_resultats(tab3, "Exercice 3")
-
-# Analyse avec annotation
-with tab4:
-    st.header("🤓 Analyse des prompts : contexte vs tâche")
-    if st.button("Analyser les prompts"):
-        prompts = []
-        for ex in ["Exercice 1", "Exercice 2", "Exercice 3"]:
-            prompts += get_logs_for_exercice(ex, date_filter)
-
-        for i, log in enumerate(prompts):
-            st.markdown(f"### Prompt #{i+1}")
-            try:
-                original = log["prompt"]
-                llm_response = call_llm(original)
-                parsed = json.loads(llm_response)
-                
-                segments = []
-                for part in parsed:
-                    if part["type"] == "contexte":
-                        segments.append((part["text"], "contexte", "#A3D5FF"))
-                    elif part["type"] == "tâche":
-                        segments.append((part["text"], "tâche", "#FFC04D"))
-                    else:
-                        segments.append(part["text"])
-                annotated_text(*segments)
-            except Exception as e:
-                st.error(f"Erreur lors de l'analyse du prompt #{i+1} : {e}")
