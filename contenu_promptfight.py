@@ -268,55 +268,24 @@ Output:
 - Exemples trop similaires → manque de nuance
 - Oublier l'instruction générale
 
----
-
-## 5. Exemple concret : Newsletter entreprise
-
-### Sans Few-Shot (vague) :
-*"Écris une newsletter pour notre entreprise"*
-
-### Avec Few-Shot (précis) :
-```
-Écris une newsletter dans le style décontracté de notre startup tech.
-
-Exemples :
-
-Sujet 1: Nouvelle fonctionnalité
-Output: 🚀 On a une surprise pour vous ! Notre nouvelle fonction "Smart Sync" 
-débarque demain. Finies les galères de synchronisation ! 
-Plus d'infos → [lien]
-
-Sujet 2: Événement équipe  
-Output: 🎉 L'équipe part en team building vendredi ! Au programme : 
-escape game et barbecue. On vous montrera nos talents cachés 😄
-Suivez nos aventures sur Insta !
-
-Maintenant, écris pour le sujet : Recrutement d'un nouveau développeur. 
 """
 
 Enonce_3 = """
 ## Exercice pratique : Few-Shot en action
 
 **Contexte :**  
-Votre startup "TechFlow" a un style de communication très particulier sur les réseaux sociaux : décontracté, avec des emojis, des références pop culture, et toujours une pointe d'humour. Vous devez créer des posts cohérents avec cette identité.
+Nous allons essayer d'extraire de façon structurée les informations d'un compte-rendu d'accident saisi de façon libre. 
+Ce type d'activité implique de donner des exemples précis au LLM pour qu'il puisse reproduire le style et la structure attendus.
+
+**Narratif d'accident :**
+> *Un opérateur 31 ans travaille sur machine de cryobroyage de plantes dans un laboratoire pharmaceutique. Il se trouve face à un dysfonctionnement de la machine. La vis sans fin de la cuve de précongélation est bloquée par un corps étranger dans le conduit d'évacuation. L'opérateur procède alors à l'ouverture des couvercles de la cuve ce qui provoqua l'arrêt du système d'entraînement et l'arrêt de l'injection d'azote liquide.*
+> *Quelques heures plus tard, son corps a été découvert inanimé dans la cuve, les jambes et le bassin ainsi que les mains et les avant-bras gelés. Il paraît vraisemblable que l'opérateur a subi un choc thermique important et suffoqué en respirant un air glacé nettement inférieur à zéro degré et où la proportion d'oxygène issu de l'air ambiant était incertaine.*
 
 **Énoncé :**  
-➤ **Étape 1 :** Commencez par un prompt classique sans exemple  
-➤ **Étape 2 :** Créez un prompt Few-Shot avec 2-3 exemples de posts dans le style "TechFlow"  
-➤ **Étape 3 :** Testez votre prompt Few-Shot sur différents sujets  
+➤ **Étape 1 :** Créez un prompt utilisant le narratif ci-dessus pour extraire les informations clés de l'accident au format suivant
+> Métier : [Métier de l'opérateur]
+> Âge : [Âge de l'opérateur]
+> Root-cause : [Cause racine de l'accident]
 
-**🎯 Exemples à inclure dans votre Few-Shot :**
-
-> **Sujet 1 :** Lancement nouvelle feature  
-> **Style TechFlow :** *"Plot twist ! 🎬 Notre nouvelle fonction 'AutoMagic' débarque demain et elle va révolutionner votre workflow comme Thanos a révolutionné l'univers Marvel (mais en mieux, promis) ✨ #TechLife #Innovation"*
-
-> **Sujet 2 :** Bug résolu  
-> **Style TechFlow :** *"Bug de ce matin = officiellement éliminé ! 🐛💥 Notre équipe de ninjas-développeurs a frappé plus vite que l'éclair ⚡ Merci pour votre patience, vous êtes les meilleurs ! ❤️ #TeamWork #FixItFast"*
-
-**➤ Étape 4 :** Comparez la qualité et la cohérence stylistique entre les deux approches
-
-**💡 Testez sur ces nouveaux sujets :**
-- Recrutement d'un stagiaire
-- Maintenance serveur prévue
-- Partenariat avec une autre startup
+** Cet exercice ne fonctionnera que si vous intégrez des exemples à votre prompt Few-Shot**
 """

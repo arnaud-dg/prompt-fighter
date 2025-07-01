@@ -45,7 +45,7 @@ st.sidebar.markdown("---")
 
 # Filtres : date et exercice
 date_filter = st.sidebar.text_input("🗕️ Date du jour", datetime.datetime.now().strftime("%d/%m/%Y"))
-exercice_filter = st.sidebar.selectbox("🎯 Choix de l'exercice", ["Exercice 1", "Exercice 2", "Exercice 3"])
+# exercice_filter = st.sidebar.selectbox("🎯 Choix de l'exercice", ["Exercice 1", "Exercice 2", "Exercice 3"])
 
 st.sidebar.markdown("---")
 
