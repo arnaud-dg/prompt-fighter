@@ -283,9 +283,9 @@ Ce type d'activité implique de donner des exemples précis au LLM pour qu'il pu
 
 **Énoncé :**  
 ➤ **Étape 1 :** Créez un prompt utilisant le narratif ci-dessus pour extraire les informations clés de l'accident au format suivant
-> Métier : [Métier de l'opérateur]
-> Âge : [Âge de l'opérateur]
-> Root-cause : [Cause racine de l'accident]
+> - Métier : [Métier de l'opérateur]
+> - Âge : [Âge de l'opérateur]
+> - Root-cause : [Cause racine de l'accident]
 
 ** Cet exercice ne fonctionnera que si vous intégrez des exemples à votre prompt Few-Shot**
 """
