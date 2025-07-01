@@ -6,3 +6,4 @@ mistral
 pandas
 tabulate
 boto3
+streamlit-annotated-text
