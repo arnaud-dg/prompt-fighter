@@ -50,7 +50,7 @@ exercice_filter = st.sidebar.selectbox("🎯 Choix de l'exercice", ["Exercice 1"
 st.sidebar.markdown("---")
 
 # Tabs pour affichage par partie
-tab1, tab2, tab3, tab4 = st.tabs(["Partie 1", "Partie 2", "Partie 3", "Analyse contexte vs tâche"])
+tab1, tab2, tab3 = st.tabs(["Partie 1", "Partie 2", "Partie 3"])
 
 # Fonction pour parser les fichiers logs S3
 def get_logs_for_exercice(exercice, date):
@@ -82,45 +82,51 @@ def call_llm(prompt_text):
     return completion.choices[0].message.content
 
 # Fonction d'affichage dans chaque onglet
+# Fonction d'affichage dans chaque onglet
 def afficher_resultats(tab, exercice):
     with tab:
         st.subheader(exercice)
-        if st.button(f"📊 Visualiser les réponses", key=f"btn_{exercice}"):
-            logs = get_logs_for_exercice(exercice, date_filter)
-            if logs:
-                df = pd.DataFrame(logs)
+        logs = get_logs_for_exercice(exercice, date_filter)
+        if logs:
+            df = pd.DataFrame(logs)
 
-                df_display = df.drop(columns=["timestamp", "jour", "session_id", "exercice"], errors='ignore')
+            # Format du prompt : "Pseudo - texte du prompt"
+            df["prompt"] = df["pseudo"] + " - " + df["prompt"]
 
+            # Préparation du tableau
+            df_display = df.drop(columns=["timestamp", "jour", "session_id", "exercice"], errors='ignore')
+
+            with st.expander("📊 Afficher le tableau des réponses", expanded=False):
                 st.data_editor(df_display, use_container_width=True, num_rows="dynamic")
 
-                st.markdown("---")
-                st.markdown("## 📄 Prompts détaillés permettant de lire l'entiereté des échanges")
+            # Affichage des prompts détaillés
+            st.markdown("---")
+            st.markdown("## 📄 Prompts détaillés permettant de lire l'entiereté des échanges")
 
-                detail_df = df[["prompt", "reponse"]].copy()
-                detail_df.columns = ["📝 Prompt", "💬 Réponse"]
+            detail_df = df[["prompt", "reponse"]].copy()
+            detail_df.columns = ["📝 Prompt", "💬 Réponse"]
 
-                detail_rows = ""
-                for _, row in detail_df.iterrows():
-                    prompt_html = f"<td style='vertical-align:top; white-space:pre-wrap;'>{row['📝 Prompt']}</td>"
-                    response_html = f"<td style='vertical-align:top; white-space:pre-wrap;'>{row['💬 Réponse']}</td>"
-                    detail_rows += f"<tr>{prompt_html}{response_html}</tr>"
+            detail_rows = ""
+            for _, row in detail_df.iterrows():
+                prompt_html = f"<td style='vertical-align:top; white-space:pre-wrap;'>{row['📝 Prompt']}</td>"
+                response_html = f"<td style='vertical-align:top; white-space:pre-wrap;'>{row['💬 Réponse']}</td>"
+                detail_rows += f"<tr>{prompt_html}{response_html}</tr>"
 
-                st.markdown(f"""
-                <table style='width:100%; border-collapse: collapse;'>
-                  <thead>
-                    <tr>
-                      <th style='text-align:left; border-bottom: 2px solid #ccc;'>📝 Prompt</th>
-                      <th style='text-align:left; border-bottom: 2px solid #ccc;'>💬 Réponse</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {detail_rows}
-                  </tbody>
-                </table>
-                """, unsafe_allow_html=True)
-            else:
-                st.info("Aucune donnée trouvée pour les filtres sélectionnés.")
+            st.markdown(f"""
+            <table style='width:100%; border-collapse: collapse;'>
+              <thead>
+                <tr>
+                  <th style='text-align:left; border-bottom: 2px solid #ccc;'>📝 Prompt</th>
+                  <th style='text-align:left; border-bottom: 2px solid #ccc;'>💬 Réponse</th>
+                </tr>
+              </thead>
+              <tbody>
+                {detail_rows}
+              </tbody>
+            </table>
+            """, unsafe_allow_html=True)
+        else:
+            st.info("Aucune donnée trouvée pour les filtres sélectionnés.")
 
 # Affichage dans les 3 tabs classiques
 afficher_resultats(tab1, "Exercice 1")
