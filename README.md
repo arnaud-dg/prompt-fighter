@@ -1,0 +1,2 @@
+- [Lien vers l'application élève](https://prompt-fighter-pvcvmq7k7xfzmmsfzrfwes.streamlit.app/)
+- [Lien vers l'application prof](https://prompt-fighter-gyt6etsqvtsct3hgxeaxsz.streamlit.app/)
