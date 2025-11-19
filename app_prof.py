@@ -6,7 +6,6 @@ import json
 import pandas as pd
 from PIL import Image
 from dotenv import load_dotenv
-from annotated_text import annotated_text
 from openai import OpenAI
 
 load_dotenv()
@@ -49,7 +48,7 @@ exercice_filter = st.sidebar.selectbox("🎯 Choix de l'exercice", ["Exercice 1"
 
 st.sidebar.markdown("---")
 
-# Tabs pour affichage par partie
+# Tabs
 tab1, tab2, tab3, tab4 = st.tabs(["Partie 1", "Partie 2", "Partie 3", "Analyse contexte vs tâche"])
 
 # Fonction pour parser les fichiers logs S3
@@ -67,9 +66,13 @@ def get_logs_for_exercice(exercice, date):
                     data.append(parsed)
     return data
 
-# Fonction d'appel à l'API OpenAI pour extraction contexte / tâche
+# Appel LLM
 def call_llm(prompt_text):
-    system_msg = "Tu es un expert en analyse de prompt. À partir d’un prompt utilisateur, identifie les parties de la phrase correspondant au CONTEXTE (le cadre ou la situation) et à la TÂCHE (ce que l’on attend de l’IA). Retourne ta réponse sous la forme d’une liste JSON avec les champs 'type' (valeurs possibles : 'contexte', 'tâche') et 'text'."
+    system_msg = (
+        "Tu es un expert en analyse de prompt. À partir d’un prompt utilisateur, "
+        "identifie les parties correspondant au CONTEXTE et à la TÂCHE. "
+        "Retourne une liste JSON avec 'type' (contexte/tâche) et 'text'."
+    )
     user_msg = f"Prompt : {prompt_text}"
     
     completion = client.chat.completions.create(
@@ -81,7 +84,7 @@ def call_llm(prompt_text):
     )
     return completion.choices[0].message.content
 
-# Fonction d'affichage dans chaque onglet
+# Fonction d'affichage par partie
 def afficher_resultats(tab, exercice):
     with tab:
         st.subheader(exercice)
@@ -89,7 +92,6 @@ def afficher_resultats(tab, exercice):
             logs = get_logs_for_exercice(exercice, date_filter)
             if logs:
                 df = pd.DataFrame(logs)
-
                 df_display = df.drop(columns=["timestamp", "jour", "session_id", "exercice"], errors='ignore')
 
                 st.data_editor(df_display, use_container_width=True, num_rows="dynamic")
@@ -122,14 +124,15 @@ def afficher_resultats(tab, exercice):
             else:
                 st.info("Aucune donnée trouvée pour les filtres sélectionnés.")
 
-# Affichage dans les 3 tabs classiques
+# Affichage dans les trois tabs
 afficher_resultats(tab1, "Exercice 1")
 afficher_resultats(tab2, "Exercice 2")
 afficher_resultats(tab3, "Exercice 3")
 
-# Analyse avec annotation
+# Analyse contexte vs tâche – sans annotated_text
 with tab4:
     st.header("🤓 Analyse des prompts : contexte vs tâche")
+
     if st.button("Analyser les prompts"):
         prompts = []
         for ex in ["Exercice 1", "Exercice 2", "Exercice 3"]:
@@ -137,19 +140,14 @@ with tab4:
 
         for i, log in enumerate(prompts):
             st.markdown(f"### Prompt #{i+1}")
+
             try:
                 original = log["prompt"]
                 llm_response = call_llm(original)
                 parsed = json.loads(llm_response)
-                
-                segments = []
-                for part in parsed:
-                    if part["type"] == "contexte":
-                        segments.append((part["text"], "contexte", "#A3D5FF"))
-                    elif part["type"] == "tâche":
-                        segments.append((part["text"], "tâche", "#FFC04D"))
-                    else:
-                        segments.append(part["text"])
-                annotated_text(*segments)
+
+                st.markdown("**Résultat JSON analysé :**")
+                st.json(parsed)
+
             except Exception as e:
                 st.error(f"Erreur lors de l'analyse du prompt #{i+1} : {e}")
