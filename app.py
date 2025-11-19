@@ -12,6 +12,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+st.set_page_config(
+    page_title="Atelier Prompting",
+    layout="wide"      # 👈 clé pour élargir la fenêtre
+)
+
 # Configuration des clés API
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
