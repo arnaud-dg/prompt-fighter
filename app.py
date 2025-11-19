@@ -295,6 +295,71 @@ with tab3:
     with st.container():
         st.markdown(Enonce_3, unsafe_allow_html=True)
 
+    # Aide rapide avec template Few-Shot
+    with st.expander("💡 Template Few-Shot à utiliser", expanded=False):
+        st.markdown("""
+        **Structure recommandée :**
+        ```
+        Écris un post dans le style décontracté de TechFlow (startup tech avec humour et références pop culture).
+
+        Exemples :
+
+        Sujet : Lancement nouvelle feature
+        Post : "Plot twist ! 🎬 Notre nouvelle fonction 'AutoMagic' débarque demain et elle va révolutionner votre workflow comme Thanos a révolutionné l'univers Marvel (mais en mieux, promis) ✨ #TechLife #Innovation"
+
+        Sujet : Bug résolu  
+        Post : "Bug de ce matin = officiellement éliminé ! 🐛💥 Notre équipe de ninjas-développeurs a frappé plus vite que l'éclair ⚡ Merci pour votre patience, vous êtes les meilleurs ! ❤️ #TeamWork #FixItFast"
+
+        Maintenant, écris pour le sujet : [VOTRE SUJET]
+        ```
+        """)
+
+    # Suggestions de sujets à tester
+    st.markdown("**💡 Sujets suggérés à tester :**")
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button("📝 Recrutement stagiaire", key="sujet1"):
+            st.session_state[prompt_key] = """Écris un post dans le style décontracté de TechFlow (startup tech avec humour et références pop culture).
+
+Exemples :
+
+Sujet : Lancement nouvelle feature
+Post : "Plot twist ! 🎬 Notre nouvelle fonction 'AutoMagic' débarque demain et elle va révolutionner votre workflow comme Thanos a révolutionné l'univers Marvel (mais en mieux, promis) ✨ #TechLife #Innovation"
+
+Sujet : Bug résolu  
+Post : "Bug de ce matin = officiellement éliminé ! 🐛💥 Notre équipe de ninjas-développeurs a frappé plus vite que l'éclair ⚡ Merci pour votre patience, vous êtes les meilleurs ! ❤️ #TeamWork #FixItFast"
+
+Maintenant, écris pour le sujet : Recrutement d'un stagiaire développeur"""
+
+    with col2:
+        if st.button("🔧 Maintenance serveur", key="sujet2"):
+            st.session_state[prompt_key] = """Écris un post dans le style décontracté de TechFlow (startup tech avec humour et références pop culture).
+
+Exemples :
+
+Sujet : Lancement nouvelle feature
+Post : "Plot twist ! 🎬 Notre nouvelle fonction 'AutoMagic' débarque demain et elle va révolutionner votre workflow comme Thanos a révolutionné l'univers Marvel (mais en mieux, promis) ✨ #TechLife #Innovation"
+
+Sujet : Bug résolu  
+Post : "Bug de ce matin = officiellement éliminé ! 🐛💥 Notre équipe de ninjas-développeurs a frappé plus vite que l'éclair ⚡ Merci pour votre patience, vous êtes les meilleurs ! ❤️ #TeamWork #FixItFast"
+
+Maintenant, écris pour le sujet : Maintenance serveur prévue ce weekend"""
+
+    with col3:
+        if st.button("🤝 Nouveau partenariat", key="sujet3"):
+            st.session_state[prompt_key] = """Écris un post dans le style décontracté de TechFlow (startup tech avec humeur et références pop culture).
+
+Exemples :
+
+Sujet : Lancement nouvelle feature
+Post : "Plot twist ! 🎬 Notre nouvelle fonction 'AutoMagic' débarque demain et elle va révolutionner votre workflow comme Thanos a révolutionné l'univers Marvel (mais en mieux, promis) ✨ #TechLife #Innovation"
+
+Sujet : Bug résolu  
+Post : "Bug de ce matin = officiellement éliminé ! 🐛💥 Notre équipe de ninjas-développeurs a frappé plus vite que l'éclair ⚡ Merci pour votre patience, vous êtes les meilleurs ! ❤️ #TeamWork #FixItFast"
+
+Maintenant, écris pour le sujet : Partenariat avec une startup de design"""
+
     # Zone de saisie
     prompt = st.text_area("Testez vos prompts Few-Shot", value=st.session_state[prompt_key], key=prompt_key, height=150)
 
